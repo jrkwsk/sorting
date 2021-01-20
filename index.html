@@ -1,0 +1,75 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>XML SORTING</title>
+</head>
+
+<body>
+    <h2>Function that sorts vast amout of data from XML file</h2>
+    <p>
+        This function was build to check if any of 1000 strings can be found among
+        100 000 of records
+    </p>
+    <p>The output is data not found in the database</p>
+
+    <button type="button" onclick="loadXMLDoc()">Filter</button>
+
+    <script>
+        const pagecategories = [
+            1219,
+            1954,
+            74,
+            79,
+            115,
+            1531,
+            765,
+            365,
+            373,
+            2319
+        ];
+        const pagecategoriesSetArr = Array.from(new Set(pagecategories));
+
+        function loadXMLDoc() {
+            const xmlhttp = new XMLHttpRequest();
+            xmlhttp.onreadystatechange = function () {
+                if (this.readyState == 4 && this.status == 200) {
+                    filterXMLData(this);
+                }
+            };
+
+            xmlhttp.open("GET", "inputfile.xml", true);
+            xmlhttp.setRequestHeader(
+                "Access-Control-Allow-Origin",
+                "localhost:5500"
+            );
+            xmlhttp.send();
+        }
+
+        function filterXMLData(xml) {
+            xmlDoc = xml.responseXML;
+            category = "";
+            y = xmlDoc.getElementsByTagName("c:category_id");
+            catnotinfeed = [];
+            allcatinfeed = [];
+
+            for (i = 0; i < 10; i++) {
+                category = y[i].textContent;
+                allcatinfeed.push(category);
+            }
+
+            for (j = 0; j < pagecategoriesSetArr.length; j++) {
+                if (allcatinfeed.includes(pagecategoriesSetArr[j] + "") === false) {
+                    catnotinfeed.push(pagecategoriesSetArr[j]);
+                }
+            }
+
+            document.write(Array.from(new Set(catnotinfeed)));
+            console.log(Array.from(new Set(catnotinfeed)));
+        }
+    </script>
+</body>
+
+</html>
